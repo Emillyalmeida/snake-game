@@ -1,27 +1,27 @@
 let canvas = document.getElementById("snake");
 let context = canvas.getContext("2d");
-let box  = 32; 
-let snake = [];
-snake [0] = {
-    x: 8 + box,
-    y: 8 + box
+let box  = 32
+let snake = []
+snake[0] = {
+    x: 8 * box,
+    y: 8 * box
 }
-let direction = "right";
+let direction = "right"
 let food = {
     x: Math.floor(Math.random()* 15+1) * box,
-    y: Math.floor(Math.random()* 15 +1) * box
-}
+    y: Math.floor(Math.random()* 15+1) * box
+ }
 
-function criarBG() {
+function criarBG(){
     context.fillStyle = "lightgreen";
-    context.fillRect(0,0,16 * box, 16 * box);
+    context.fillRect(0, 0 ,16 * box, 16 * box);
 
 }
 
 function criarCobrinha(){
     for (i = 0; i < snake.length; i++){
         context.fillStyle = "green";
-        context.fillRect(snake[1].x, snake[1].y, box, box);
+        context.fillRect(snake[i].x, snake[i].y, box, box);
 
     }
 }
@@ -33,23 +33,42 @@ function createFood(){
 
 document.addEventListener('keydown', update);
 
-function update (event){
-    if(event.keyCode == 37 && direction != "right")direction = "left";
-    if(event.keyCode == 38 && direction != "down")direction = "up";
-    if(event.keyCode == 39 && direction != "left")direction = "righr";
-    if(event.keyCode == 37 && direction != "up")direction = "down";
-
+function update(event){
+    if(event.keyCode == 37 && direction != 'right') direction = 'left';
+    if(event.keyCode == 38 && direction != 'down') direction = 'up';
+    if(event.keyCode == 39 && direction != 'left') direction = 'right';
+    if(event.keyCode == 40 && direction != 'up') direction = 'down';
 }
 
 function startGame(){
 
-    if(snake[0].x  > 15 * box && direction == 'rigth') snake[0].x = 0;
-    if(snake[0].x < 0 && direction == "left") snake[0].x = 16 * box;
-    if(snake[0].y > 15 * box  && direction == "down") snake[0].y =0;
-    if(snake[0].y < 0 && direction == "up") snake[0].y = 16 * box;
+    if(snake[0].x > 15 * box && direction == "rigth") snake[0].x = 0
+    if(snake[0].x > 15 * box && direction == "up") snake[0].x = 0
+    if(snake[0].x > 15 * box && direction == "down")snake[0].x = 0
+
+    if(snake[0].x < 0 && direction == "left") snake[0].x = 15 * box
+    if(snake[0].x < 0 && direction == "up")snake[0].x = 15 * box
+    if(snake[0].x < 0 && direction == "down")snake[0].x = 15 * box
+
+    if(snake[0].y > 15 * box && direction == 'down')snake[0].y = 0
+    if(snake[0].y > 15 * box && direction == 'rigth') snake[0].y = 0
+    if(snake[0].y > 15 * box && direction == 'left')snake[0].y = 0
+
+    if(snake[0].y < 0 && direction == 'up')snake[0].y = 15 * box
+    if(snake[0].y < 0 && direction == 'rigth')snake[0].y = 15 * box
+    if(snake[0].y < 0 && direction == 'left')snake[0].y = 15 * box
+
+    for(i = 1; i < snake.length; i++){
+        if(snake[0].x == snake[i].x && snake[0].y == snake[i].y){
+        clearInterval(game);
+        alert('Game over : (');
+        }
+
+    }
 
     criarBG();
     criarCobrinha();
+    createFood();
 
     let snakex = snake[0].x;
     let snakey = snake[0].y;
@@ -59,9 +78,17 @@ function startGame(){
     if(direction == "up") snakex -= box;
     if(direction == "down") snakey += box;
 
-    snake.pop();
+    if(snakex != food.x || snakey != food.y){
+        snake.pop();
 
-    let newHead = {
+    }else{
+        food.x = Math.floor(Math.random() * 15 +1) * box;
+        food.y = Math.floor(Math.random() * 15 +1) * box;
+    }
+
+    
+
+    let newHead ={
         x: snakex,
         y: snakey
     }
